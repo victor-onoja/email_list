@@ -54,6 +54,10 @@
       button:hover {
         background-color: #0056b3;
       }
+      button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+      }
       .message {
         margin-top: 1rem;
         padding: 0.75rem;
@@ -68,40 +72,123 @@
         background-color: #f8d7da;
         color: #721c24;
       }
+      .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(255, 255, 255, 0.9);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+      }
+      .loading-spinner {
+        width: 50px;
+        height: 50px;
+        border: 5px solid #f3f3f3;
+        border-top: 5px solid #007bff;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-bottom: 1rem;
+      }
+      .loading-text {
+        color: #666;
+        font-size: 1.1rem;
+        text-align: center;
+      }
+      .loading-subtext {
+        color: #888;
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+        text-align: center;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      .content {
+        display: none;
+      }
     </style>
   </head>
   <body>
-    <div class="container">
-      <h1>Stay Updated</h1>
-      <p>
-        Subscribe to receive my latest articles directly in your inbox. No spam,
-        just thoughtful content straight to you.
-      </p>
+    <div class="loading-overlay">
+      <div class="loading-spinner"></div>
+      <div class="loading-text">Just a moment...</div>
+      <div class="loading-subtext">We're warming up the servers for you!</div>
+    </div>
 
-      <form id="signup-form">
-        <input
-          type="email"
-          id="email"
-          placeholder="Enter your email address"
-          required
-        />
-        <button type="submit">Subscribe</button>
-      </form>
+    <div class="content">
+      <div class="container">
+        <h1>Stay Updated</h1>
+        <p>
+          Subscribe to receive my latest articles directly in your inbox. No
+          spam, just thoughtful content straight to you.
+        </p>
 
-      <div class="message success-message">
-        Thanks for subscribing! You'll receive my next article soon.
-      </div>
-      <div class="message error-message">
-        An error occurred. Please try again.
+        <form id="signup-form">
+          <input
+            type="email"
+            id="email"
+            placeholder="Enter your email address"
+            required
+          />
+          <button type="submit">Subscribe</button>
+        </form>
+
+        <div class="message success-message">
+          Thanks for subscribing! You'll receive my next article soon.
+        </div>
+        <div class="message error-message">
+          An error occurred. Please try again.
+        </div>
       </div>
     </div>
 
     <script>
       $(document).ready(function () {
+        // Check if server is ready
+        checkServer();
+
+        function checkServer() {
+          $.ajax({
+            url: "/subscribers",
+            method: "GET",
+            timeout: 60000, // 60 second timeout
+            success: function () {
+              $(".loading-overlay").fadeOut();
+              $(".content").fadeIn();
+            },
+            error: function (xhr, status, error) {
+              if (status === "timeout") {
+                $(".loading-text").text("Taking longer than expected...");
+                $(".loading-subtext").text(
+                  "Please refresh the page if this continues."
+                );
+              }
+              // Retry after 2 seconds if it's not a timeout
+              if (status !== "timeout") {
+                setTimeout(checkServer, 2000);
+              }
+            },
+          });
+        }
+
         $("#signup-form").on("submit", function (e) {
           e.preventDefault();
 
           const email = $("#email").val();
+          const submitButton = $(this).find("button");
+
+          // Disable button and show loading state
+          submitButton.prop("disabled", true).text("Subscribing...");
 
           $.ajax({
             url: "/subscribe",
@@ -119,6 +206,10 @@
                 "An error occurred. Please try again.";
               $(".error-message").text(errorMessage).show();
               $(".success-message").hide();
+            },
+            complete: function () {
+              // Re-enable button and restore text
+              submitButton.prop("disabled", false).text("Subscribe");
             },
           });
         });
