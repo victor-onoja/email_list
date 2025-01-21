@@ -108,10 +108,11 @@
 
       iframe {
         width: 100%;
-        height: 200px;
+        height: 400px;
         border: none;
-        margin-top: 1rem;
         background: transparent;
+        margin: 0;
+        padding: 0;
       }
 
       .features {
@@ -186,6 +187,32 @@
         background-color: var(--bg-secondary) !important;
       }
 
+      .form-container::after {
+        content: "↓ Subscribe below ↓";
+        display: block;
+        text-align: center;
+        color: var(--accent);
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+        animation: bounce 2s infinite;
+      }
+
+      @keyframes bounce {
+        0%,
+        20%,
+        50%,
+        80%,
+        100% {
+          transform: translateY(0);
+        }
+        40% {
+          transform: translateY(-5px);
+        }
+        60% {
+          transform: translateY(-3px);
+        }
+      }
+
       /* Responsive adjustments */
       @media (max-width: 768px) {
         h1 {
@@ -198,6 +225,14 @@
 
         .features {
           grid-template-columns: 1fr;
+        }
+
+        iframe {
+          min-height: 450px; /* Even taller on mobile */
+        }
+
+        .form-container {
+          padding: 1rem; /* Reduce padding on mobile */
         }
       }
     </style>
@@ -214,7 +249,7 @@
           <div class="form-container">
             <!-- Replace YOUR_GOOGLE_FORM_URL with your actual Google Form embed URL -->
             <iframe
-              src="https://docs.google.com/forms/d/e/1FAIpQLSfsJOxHsxuT_DdBXGdbkKp_b5H4wnnfMzn5p0Ife0zvztnOHw/viewform?embedded=true"
+              src="https://docs.google.com/forms/d/e/1FAIpQLSfsJOxHsxuT_DdBXGdbkKp_b5H4wnnfMzn5p0Ife0zvztnOHw/viewform?embedded=true&usp=pp_url"
             ></iframe>
           </div>
         </div>
