@@ -5,20 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Blast Tech Articles Signup</title>
     <style>
+      :root {
+        --bg-primary: #0f172a;
+        --bg-secondary: #1e293b;
+        --accent: #38bdf8;
+        --text-primary: #f1f5f9;
+        --text-secondary: #94a3b8;
+        --glow: 0 0 15px rgba(56, 189, 248, 0.3);
+      }
+
       body {
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
           sans-serif;
         line-height: 1.6;
         margin: 0;
         padding: 0;
-        background-color: #f9f9f9;
-        color: #333;
+        background-color: var(--bg-primary);
+        color: var(--text-primary);
       }
 
       .header {
-        background-color: white;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        background-color: rgba(30, 41, 59, 0.8);
+        backdrop-filter: blur(8px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         padding: 1rem 0;
+        position: fixed;
+        width: 100%;
+        z-index: 1000;
       }
 
       .container {
@@ -28,37 +41,77 @@
       }
 
       .hero {
-        padding: 4rem 0;
+        padding: 8rem 0 4rem;
         text-align: center;
+        background: linear-gradient(
+          to bottom,
+          transparent,
+          var(--bg-primary) 100%
+        );
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 100%;
+        background: radial-gradient(
+          circle at 50% 0%,
+          var(--accent),
+          transparent 70%
+        );
+        opacity: 0.1;
+        pointer-events: none;
       }
 
       h1 {
-        font-size: 2.5rem;
+        font-size: 3rem;
         margin-bottom: 1rem;
-        color: #2d3748;
+        background: linear-gradient(
+          to right,
+          var(--text-primary),
+          var(--accent)
+        );
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: fadeInUp 0.8s ease-out;
       }
 
       .subtitle {
         font-size: 1.25rem;
-        color: #4a5568;
+        color: var(--text-secondary);
         margin-bottom: 2rem;
+        animation: fadeInUp 0.8s ease-out 0.2s backwards;
       }
 
       .form-container {
-        background: white;
+        background: var(--bg-secondary);
         padding: 2rem;
-        border-radius: 10px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         max-width: 500px;
         margin: 0 auto;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        animation: fadeInUp 0.8s ease-out 0.4s backwards;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
       }
 
-      /* Make the Google Form iframe blend in */
+      .form-container:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--glow);
+      }
+
       iframe {
         width: 100%;
         height: 200px;
         border: none;
         margin-top: 1rem;
+        background: transparent;
       }
 
       .features {
@@ -66,49 +119,96 @@
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
         gap: 2rem;
         padding: 4rem 0;
+        animation: fadeInUp 0.8s ease-out 0.6s backwards;
       }
 
       .feature {
-        text-align: center;
-        padding: 1.5rem;
+        background: var(--bg-secondary);
+        padding: 2rem;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .feature:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
       }
 
       .feature h3 {
-        color: #2d3748;
+        color: var(--accent);
         margin-bottom: 1rem;
+        font-size: 1.5rem;
       }
 
       .feature p {
-        color: #4a5568;
+        color: var(--text-secondary);
+        margin: 0;
       }
 
       .footer {
-        background-color: #2d3748;
-        color: white;
+        background-color: var(--bg-secondary);
+        color: var(--text-secondary);
         padding: 2rem 0;
         margin-top: 4rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
       }
 
       .footer p {
         margin: 0;
         text-align: center;
       }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Add a nice hover effect to links */
+      a {
+        color: var(--accent);
+        text-decoration: none;
+        transition: color 0.3s ease;
+      }
+
+      a:hover {
+        color: #7dd3fc;
+      }
+
+      /* Customizing the Google Form iframe background */
+      iframe {
+        background-color: var(--bg-secondary) !important;
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+        h1 {
+          font-size: 2.5rem;
+        }
+
+        .hero {
+          padding: 6rem 0 3rem;
+        }
+
+        .features {
+          grid-template-columns: 1fr;
+        }
+      }
     </style>
   </head>
   <body>
-    <header class="header">
-      <div class="container">
-        <!-- You can add your logo or name here -->
-        <img src="blast.jpg" alt="Victor Onoja Odoh" height="40" />
-      </div>
-    </header>
-
     <main>
       <section class="hero">
         <div class="container">
           <h1>Stay In The Loop</h1>
           <p class="subtitle">
-            Get my latest articles delivered straight to your inbox.
+            Get the latest insights delivered straight to your inbox.
           </p>
 
           <div class="form-container">
@@ -123,16 +223,16 @@
       <section class="container">
         <div class="features">
           <div class="feature">
-            <h3>Quality Content</h3>
-            <p>Carefully crafted articles that provide real value.</p>
+            <h3>⚡ Quality Content</h3>
+            <p>Deep insights and analysis you won't find anywhere else.</p>
           </div>
           <div class="feature">
-            <h3>No Spam</h3>
+            <h3>🎯 No Spam</h3>
             <p>Only receive emails when there's something worth sharing.</p>
           </div>
           <div class="feature">
-            <h3>Unsubscribe Anytime</h3>
-            <p>Easy opt-out whenever you want.</p>
+            <h3>🚀 Early Access</h3>
+            <p>Be the first to know about new articles and updates.</p>
           </div>
         </div>
       </section>
